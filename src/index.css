@@ -1,0 +1,93 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import 'react-date-range/dist/styles.css'; 
+@import 'react-date-range/dist/theme/default.css';
+
+@layer utilities {
+    ::-webkit-scrollbar {
+        width: 14px;
+        background-color: #F5F5F5;
+      }
+      /* Change the appearance of the thumb */
+      ::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 10px;
+        border: 3px solid #F5F5F5;
+      }
+      /* Change the appearance of the track */
+      ::-webkit-scrollbar-track {
+        background-color: #F5F5F5;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background:#aaa;
+      }
+  }
+
+  @keyframes slideaway {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-5px); }
+  }
+  
+  .hide {
+    animation: slideaway 300ms;
+    animation-fill-mode: forwards;
+  }
+
+  .show {
+    animation: slidein 300ms;
+    display: block;
+  }
+
+  @keyframes slidein {
+    from { transform: translateY(-5px); opacity: 0;}
+    to { display: block; }
+  }
+
+  @keyframes fadein{
+    from { opacity: 0;}
+    to { opacity: 1;}
+  }
+
+  @keyframes fadeout{
+    from { opacity: 1;}
+    to { opacity: 0;}
+  }
+
+  .fadein {
+    animation: fadein 400ms;
+    display: block;
+  }
+
+  .fadeout {
+    animation: fadeout 400ms;
+    display: none;
+  }
+
+  .menu_top::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    right: 50%;
+    height: 16px;
+    width: 16px;
+    rotate: 45deg;
+    background-color: #fff;
+    z-index: 10;
+    border-width: 1px 0px 0px 1px;
+    --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.required::before {
+    content: '*';
+    color: red;
+    margin-right: 4px;
+}
+
+label{
+    font-weight: 400;
+    font-size: 14px;
+}
