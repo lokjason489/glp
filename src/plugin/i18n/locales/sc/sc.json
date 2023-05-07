@@ -30,5 +30,6 @@
     "adult": "成人",
     "child": "儿童",
     "adults_per_room": "每房成人 :",
-    "children_per_room": "每房儿童 :"
+    "children_per_room": "每房儿童 :",
+    "per_night": "(每晚)"
 }

@@ -1,48 +1,41 @@
 // tailwind.config.js
-const GLP_colors = {
-  theme: {
-    extend: {
-      colors: {
-        'primary': '#b29966',
-        'secondary': '#2b6d71',
-        'third': '#707070',
-      },
-    },
-  },
-}
-
-const TKL_colors = {
-  theme: {
-    extend: {
-      colors: {
-        'primary': '#000000',
-        'secondary': '#5d656c',
-        'third': '#707070',
-      },
-    },
-  },
-}
 
 module.exports = {
   mode: 'jit',
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
-  GLP: GLP_colors,
-  TKL: TKL_colors,
+  darkMode: 'media', // or 'media' or 'class'
   theme: {
     extend: {
       colors: {
-        'primary': '#b29966',
-        'secondary': '#2b6d71',
-        'third': '#707070',
+        'primary': 'var(--color-primary)', 
+        'secondary': 'var(--color-secondary)',
+        'third': 'var(--color-third)',
         'button-inactive': '#acacac',
         'background-popup': '#e9e9e9',
-        'primary-hover':'#c1ae84',
+        'primary-hover': 'var(--color-primary-hover)',
       },
+      fontFamily: {
+        'primary': 'var(--font-primary)',
+      },
+      borderRadius: {
+        'none': '0',
+        'sm': '0.125rem',
+        'DEFAULT': 'var(--round-primary)',
+        'md': '0.375rem',
+        'lg': '0.5rem',
+        'xl': '0.75rem',
+        '2xl': '1rem',
+        '3xl': '1.5rem',
+        'full': '9999px',
+      },
+      boxShadow: {
+        'DEFAULT': '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 4px -1px rgb(0 0 0 / 0.1)',
+      }
     },
   },
   variants: {
     extend: {
-      borderWidth: ['hover', 'focus','group-hover'],
+      borderWidth: ['hover', 'focus', 'group-hover'],
     },
   },
   plugins: [],

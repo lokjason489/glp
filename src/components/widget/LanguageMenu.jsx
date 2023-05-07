@@ -42,7 +42,7 @@ const LanguageMenu = ({ languageList, currentLanguage, onLanguageChange }) => {
           <IoCaretDown className={`${isMenuOpen ? 'rotate-180' : ''} duration-300 pointer-events-none`}></IoCaretDown></div>
       </button>
       {
-         isMenuOpen && <div className={`${isMenuOpen ? 'show' : 'hide'} menu_top absolute right-0 mt-2 w-24 bg-white shadow-secondary rounded-md shadow-sm z-10`}>
+         isMenuOpen && <div className={`${isMenuOpen ? 'show' : 'hide'} menu_top absolute right-0 mt-2 w-24 bg-white shadow-secondary rounded-md shadow-md z-10`}>
          <ul className="py-2">
            {languageList.map((item, index) => (
              <li key={index} className="hover:bg-gray-100">

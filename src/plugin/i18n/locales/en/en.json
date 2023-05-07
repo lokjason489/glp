@@ -30,5 +30,6 @@
     "adult": "Adults",
     "child": "Children",
     "adults_per_room": "Adults Per Room :",
-    "children_per_room": "Children Per Room :"
+    "children_per_room": "Children Per Room :",
+    "per_night": "Per Night"
 }
