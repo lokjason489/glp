@@ -3,9 +3,9 @@ import Layout from "../components/ui/layout";
 
 const RoomType = () => {
     return (
-        <Layout>
+        <Layout skin={undefined}>
             {(currency) => (
-                <h1>RoomType</h1>
+                <h1>RoomType{currency}</h1>
             )
             }
         </Layout>

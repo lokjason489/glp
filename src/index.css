@@ -55,7 +55,7 @@
   }
 
   [data-theme="PVM"]{
-    --color-primary: #80642f;
+    --color-primary: #7c6537;
     --color-secondary: #806533;
     --color-third: #707070;
     --color-primary-hover: #beab82;
@@ -93,9 +93,6 @@
   border: 4px solid var(--color-secondary);
 }
 
-.round{
-  border-radius: DEFAULT;
-}
 
 .title{
   text-transform: var(--text-transform);
@@ -157,13 +154,30 @@
   content: '';
   position: absolute;
   top: -10px;
-  left: 50%;
+  left: 40%;
   right: 50%;
   height: 16px;
   width: 16px;
   rotate: 45deg;
   background-color: #fff;
-  z-index: 10;
+  z-index: -1;
+  border-width: 1px 0px 0px 1px;
+  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.tooltip::after{
+  content: '';
+  position: absolute;
+  top: 40%;
+  bottom: 50%;
+  right: -5px;
+  height: 8px;
+  width: 8px;
+  rotate: 135deg;
+  background-color: #fff;
+  z-index: -1;
   border-width: 1px 0px 0px 1px;
   --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);

@@ -2,7 +2,15 @@ import React from "react";
 import {MdKeyboardDoubleArrowRight} from "react-icons/md";
 import { useTranslation } from 'react-i18next';
 
-const ProgressNav = ({ progressList, currentProgress }) => {
+interface Props{
+    progressList: {
+        label: string;
+        value: number;
+    }[];
+    currentProgress: number;
+}
+
+const ProgressNav : React.FC<Props> = ({ progressList, currentProgress }) => {
     const { t } = useTranslation();
     return (
         <div className="flex flex-row justify-center items-center select-none">

@@ -2,17 +2,26 @@ import React, { useState, useEffect } from 'react';
 import LanguageMenu from '../widget/LanguageMenu';
 import CurrencyMenu from '../widget/CurrencyMenu';
 import { IoCaretDown, IoInformationCircleOutline } from "react-icons/io5";
-import Popup from '../widget/popup';
+import Popup from '../widget/Popup';
 import { useTranslation } from 'react-i18next';
 
-const Header = ({currencyList, currency, setCurrency,skin}) => {
+
+interface Props{
+  currencyList: {
+    label: string;
+    value: number;
+  }[];
+  currency: string;
+  setCurrency: (curr: string) => void;
+  skin: string;
+}
+
+const Header: React.FC<Props> = ({ currencyList, currency, setCurrency, skin }) => {
   const languageList = [
     { label: "EN", value: "en" },
     { label: "简", value: "sc" },
     { label: "繁", value: "tc" },
   ];
-
-  window.currencyList = currencyList;
 
   const { t, i18n } = useTranslation();
 
@@ -30,12 +39,12 @@ const Header = ({currencyList, currency, setCurrency,skin}) => {
     setIsPopupOpen(!isPopupOpen);
   }
 
-  const handleLanguageChange = (lang) => {
+  const handleLanguageChange = (lang : string) => {
     setLanguage(lang);
     i18n.changeLanguage(languageList.filter(el => el.label === lang)[0].value);
   }
 
-  const handleCurrencyChange = (curr) => {
+  const handleCurrencyChange = (curr : string) => {
     setCurrency(curr);
   }
 
@@ -80,8 +89,8 @@ const Header = ({currencyList, currency, setCurrency,skin}) => {
       </div>
       <div className={`md:flex hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  justify-end items-center h-1/1 transition-all ${isScrolling ? "h-14 ease-in duration-150" : `${skin === 'tkl' ? 'md:h-20': "md:h-28" } h-14 ease-out duration-300 `}`}>
         <div className="flex justify-center items-center">
-          <CurrencyMenu CurrencyList={currencyList} currentCurrency={currency} onCurrencyChange={handleCurrencyChange} className="mr-4" />
-          <LanguageMenu languageList={languageList} currentLanguage={language} onLanguageChange={handleLanguageChange} className="mr-4" />
+          <CurrencyMenu CurrencyList={currencyList} currentCurrency={currency} onCurrencyChange={handleCurrencyChange}/>
+          <LanguageMenu languageList={languageList} currentLanguage={language} onLanguageChange={handleLanguageChange}/>
         </div>
       </div>
       <div className={`md:hidden flex max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  justify-end items-center h-1/1 transition-all ${isScrolling ? "h-14 ease-in duration-150" : `${skin === 'tkl' ? 'md:h-20': "md:h-28" } h-14 ease-out duration-300 `}`}>
@@ -90,7 +99,8 @@ const Header = ({currencyList, currency, setCurrency,skin}) => {
           <IoCaretDown className={`${isPopupOpen ? 'rotate-180' : ''} duration-300 pointer-events-none`}></IoCaretDown>
         </button>
       </div>
-      <Popup isOpen={isPopupOpen} onClose={togglePopup} classList={"bg-background-popup "}>
+      <Popup isOpen={isPopupOpen} onClose={togglePopup} classList={"bg-background-popup"} popupSize="max-w-sm"
+      innerProp = {
         <div className="flex justify-center items-center flex-col text-center">
           <div className='text-sm text-third font-bold pb-3'>{t('please_select_language')}</div>
           {languageList.map((item, index) => (
@@ -121,8 +131,7 @@ const Header = ({currencyList, currency, setCurrency,skin}) => {
               {t('currency_desc')}
             </span>
           </div>
-        </div>
-      </Popup>
+        </div>}/>
     </header>
   );
 };

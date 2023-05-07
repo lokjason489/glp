@@ -3,7 +3,12 @@ import Header from './Header';
 import Footer from './Footer';
 import {Helmet} from "react-helmet";
 
-const Layout = ({ skin, children }) => {
+interface Props{
+  skin: string | undefined;
+  children: (currency: string) => React.ReactNode;
+}
+
+const Layout: React.FC<Props >= ({ skin, children }) => {
 
   const currencyList = [
     { label: 'mop', value: 1 },
@@ -14,7 +19,7 @@ const Layout = ({ skin, children }) => {
     { label: 'krw', value: 1 }
   ]
 
-  const setTheme = (theme) => {
+  const setTheme = (theme : string | undefined) => {
     if (theme && (theme.toUpperCase() === 'TKL' || theme.toUpperCase() === 'GLP' || theme.toUpperCase() === 'PVM')) {
       document.getElementsByTagName('html')[0].setAttribute('data-theme', theme.toUpperCase());
       return;
@@ -24,7 +29,7 @@ const Layout = ({ skin, children }) => {
 
   useEffect(() => {
     setTheme(skin);
-    const favicon = document.getElementById('favicon');
+    const favicon = document.getElementById('favicon') as HTMLLinkElement | null;
     if(favicon){
       if (skin && skin.toUpperCase() === 'TKL') {
         favicon.href = '/K-head_black_RGB.ico';

@@ -1,10 +1,32 @@
 import React, { useState } from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import Calendar from "@demark-pro/react-booking-calendar";
+import {Calendar,DayState} from "@demark-pro/react-booking-calendar";
 import { useTranslation } from 'react-i18next';
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
-const PopupCalendar = ({ isOpen, onClose, CalendarList, className, arrivalDate, departureDate, setArrivalDate, setDepartureDate, currency }) => {
+interface Props {
+    isOpen: boolean
+    onClose: () => void
+    CalendarList: CalendarList;
+    className: string;
+    arrivalDate: string;
+    departureDate: string;
+    setArrivalDate: (arrivalDate: string) => void;
+    setDepartureDate: (departureDate: string) => void;
+    currency: string;
+}
+
+interface CalendarList {
+    code: number;
+    msg: string;
+    data: {
+      [date: string]: {
+        price: string;
+      };
+    };
+  }
+
+const PopupCalendar: React.FC<Props> = ({ isOpen, onClose, CalendarList, className, arrivalDate, departureDate, setArrivalDate, setDepartureDate, currency }) => {
 
     const { t, i18n } = useTranslation();
 
@@ -16,7 +38,7 @@ const PopupCalendar = ({ isOpen, onClose, CalendarList, className, arrivalDate, 
     ];
     const [selectedDates, setSelectedDate] = useState([new Date(arrivalDate), new Date(departureDate)]);
 
-    const handleSelect = (date) => {
+    const handleSelect = (date : Date[]) => {
         setSelectedDate(date);
         let tempDate1 = new Date(date[0]);
 
@@ -35,7 +57,7 @@ const PopupCalendar = ({ isOpen, onClose, CalendarList, className, arrivalDate, 
         }
     }
 
-    function customDayContent(day, innerProps) {
+    function customDayContent(day : Date, innerProps: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> | undefined) {
         let extraText = null;
         const yyyy = day.getFullYear();
         const mm = String(day.getMonth() + 1).padStart(2, '0');
@@ -74,12 +96,12 @@ const PopupCalendar = ({ isOpen, onClose, CalendarList, className, arrivalDate, 
                         <Calendar
                             selected={selectedDates}
                             onChange={handleSelect}
-                            onOverbook={(e, err) => alert(err)}
+                            onOverbook={( err) => alert(err)}
                             components={{
-                                MonthContainer: ({ children, ...props }) => {
+                                MonthContainer: ({ children}) => {
                                     return <div className="relative flex flex-row justify-between items-center bg-secondary h-12 text-white">{children}</div>
                                 },
-                                MonthContent: ({ month, year, ...props }) => {
+                                MonthContent: ({ month, year }) => {
                                     let locales = i18n.language === 'en' ? 'en-US' : 'zh-CN';
                                     let displayText = new Date(year, month, 1).toLocaleDateString(locales, { month: 'long', year: 'numeric' })
                                     return <div className="text-xl font-semibold  text-white">{displayText}</div>
@@ -93,7 +115,7 @@ const PopupCalendar = ({ isOpen, onClose, CalendarList, className, arrivalDate, 
                                 DayCell: ({ children, innerProps }) => {
                                     return <div {...innerProps} className="h-24 relative flex justify-center items-center align-middle cursor-pointer flex-col border" style={{ width: 'calc(100%/7)' }} >{children}</div>
                                 },
-                                DayCellHeader: ({ date,state,children, innerProps }) => {
+                                DayCellHeader: ({ state,children, innerProps }) => {
                                     if (state.isToday) {
                                         return <div {...innerProps} className="text-xs text-gray-500">{children}</div>
                                     }
@@ -103,7 +125,7 @@ const PopupCalendar = ({ isOpen, onClose, CalendarList, className, arrivalDate, 
                                     return customDayContent(date, innerProps);
                                 }
                             }}
-                            disabled={(date, state) => !state.isSameMonth}
+                            disabled={( date: Date, state: DayState ) => !state.isSameMonth || date < new Date()}
                             reserved={reserved}
                             variant="booking"
                             isStart={true}
