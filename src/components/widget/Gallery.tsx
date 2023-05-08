@@ -38,7 +38,7 @@ const Gallery: React.FC<Props> = ({ ImageList, title, desc }) => {
     // renderThumbInner: undefined,
     // imageSet: undefined,
     // renderNav: undefined,
-    // srcSet: undefined,
+    srcSet: item.src,
     thumbnailLoading: 'lazy',
     // originalClass: undefined,
     originalTitle:title,

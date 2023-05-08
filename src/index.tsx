@@ -1,4 +1,3 @@
-import React from 'react';
 import './index.css'; // import the CSS file
 import App from './App';
 import "./plugin/i18n/i18n.js";

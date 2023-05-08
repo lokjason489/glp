@@ -4,7 +4,7 @@ import Footer from './Footer';
 import {Helmet} from "react-helmet";
 
 interface Props{
-  skin: string | undefined;
+  skin: string | undefined | null;
   children: (currency: string) => React.ReactNode;
 }
 
@@ -19,7 +19,7 @@ const Layout: React.FC<Props >= ({ skin, children }) => {
     { label: 'krw', value: 1 }
   ]
 
-  const setTheme = (theme : string | undefined) => {
+  const setTheme = (theme : string | undefined | null) => {
     if (theme && (theme.toUpperCase() === 'TKL' || theme.toUpperCase() === 'GLP' || theme.toUpperCase() === 'PVM')) {
       document.getElementsByTagName('html')[0].setAttribute('data-theme', theme.toUpperCase());
       return;
@@ -52,7 +52,7 @@ const Layout: React.FC<Props >= ({ skin, children }) => {
     <main className="flex-grow bg-white">
       <div className="max-w-7xl mx-auto px-2 md:px-4 lg:px-6 min-h-50xl py-6">{children(currency)}</div>
     </main>
-    <Footer/>
+    <Footer skin={skin && (skin.toUpperCase() === 'TKL' || skin.toUpperCase() === 'GLP' || skin.toUpperCase() === 'PVM')? skin:'GLP'} />
   </div>
   )
 };

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-      "jsx": "react",
+      "jsx": "react-jsx",
       "esModuleInterop": true,
       "target": "es6",
       "module": "esnext",
@@ -9,7 +9,9 @@
       "noImplicitAny": true,
       "strictNullChecks": true,
       "noUnusedLocals": true,
-      "noUnusedParameters": true
+      "noUnusedParameters": true,
+      "outDir": "./dist/",
+      "allowJs": true,
     },
     "include": [
       "src/"

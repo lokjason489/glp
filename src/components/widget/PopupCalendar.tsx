@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useRef, useEffect,useCallback} from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import {Calendar,DayState} from "@demark-pro/react-booking-calendar";
 import { useTranslation } from 'react-i18next';
@@ -6,7 +6,7 @@ import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
 interface Props {
     isOpen: boolean
-    onClose: () => void
+    onClose: React.Dispatch<React.SetStateAction<boolean>>
     CalendarList: CalendarList;
     className: string;
     arrivalDate: string;
@@ -29,6 +29,8 @@ interface CalendarList {
 const PopupCalendar: React.FC<Props> = ({ isOpen, onClose, CalendarList, className, arrivalDate, departureDate, setArrivalDate, setDepartureDate, currency }) => {
 
     const { t, i18n } = useTranslation();
+
+    const menuRef = useRef<HTMLDivElement>(null);
 
     const reserved = [
         {
@@ -78,16 +80,30 @@ const PopupCalendar: React.FC<Props> = ({ isOpen, onClose, CalendarList, classNa
         return <div {...innerProps}>test</div>;
     };
 
+    const handleClickOutside = useCallback((event: MouseEvent) => {
+        if (menuRef.current && (event.target instanceof Node && menuRef.current.contains(event.target))) {
+          onClose(false);
+        }
+      }, [menuRef, onClose]);
+      
+      useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+      
+        return () => {
+          document.removeEventListener("click", handleClickOutside);
+        };
+      }, [handleClickOutside]);
+
     return (
         <div>
             {isOpen && (
-                <div className="fixed top-0 left-0 w-full h-full bg-gray-800 opacity-50 z-40"></div>
+                <div ref={menuRef} className="fixed top-0 left-0 w-full h-full bg-gray-800 opacity-50 z-40"></div>
             )}
             {isOpen && (
                 <div className={`fixed shadow-lg top-1/2 left-1/2 rounded-md transform -translate-x-1/2 -translate-y-1/2 bg-background-popup z-50 lg:w-10/12 md:max-w-5xl w-full ${className}`}>
-                    <div className='w-full text-right'> <button
-                        className=" text-gray-500 hover:text-gray-800 text-right h-8 w-8 my-2 font-black"
-                        onClick={onClose}
+                    <div className='w-full text-right pointer-events-none'> <button
+                        className=" text-gray-500 hover:text-gray-800 text-right h-8 w-8 my-2 font-black pointer-events-auto"
+                        onClick={()=>onClose}
                     >
                         <IoCloseCircleOutline className="text-third h-full w-full hover:text-gray-300" />
                     </button></div>

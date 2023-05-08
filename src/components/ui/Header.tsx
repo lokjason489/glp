@@ -68,10 +68,10 @@ const Header: React.FC<Props> = ({ currencyList, currency, setCurrency, skin }) 
   return (
     <header className={`top-0 w-full z-30 bg-white shadow-xl border-secondary border-b-2 transition-all ${isScrolling ? "h-14 ease-in sticky duration-150" : `${skin === 'tkl' ? 'md:h-20': "md:h-28" } md:static h-14 ease-out fixed duration-300`}`}>
       <div className="w-1/1 h-1/1 relative">
-        <div className="absolute md:block hidden top-1/2 left-1/2 transform -translate-x-1/2">
+        <div className={`absolute md:block hidden top-1/2 left-1/2 transform -translate-x-1/2 ${skin === 'tkl' ? '': '' } `}>
           <a href="/" className={`w-auto ${isScrolling ? "h-9 my-3" : "h-20 my-4"}`}>
             <img
-              className={`w-auto transition-all ${isScrolling ? `h-9 my-3 ease-in duration-150` :` ${skin === 'tkl' ? 'my-3 max-w-sm h-auto': "my-4 h-20" } ease-out duration-300`}`}
+              className={`w-auto transition-all ${isScrolling ? `h-9 my-3 ease-in duration-150` :` ${skin === 'tkl' ? 'my-3 h-14': "my-4 h-20" } ease-out duration-300`}`}
               src={isScrolling ? '/images/' + skin + "_smallLogo.png" : '/images/' + skin + "_Logo.png"}
               alt="Logo"
             />
@@ -99,7 +99,7 @@ const Header: React.FC<Props> = ({ currencyList, currency, setCurrency, skin }) 
           <IoCaretDown className={`${isPopupOpen ? 'rotate-180' : ''} duration-300 pointer-events-none`}></IoCaretDown>
         </button>
       </div>
-      <Popup isOpen={isPopupOpen} onClose={togglePopup} classList={"bg-background-popup"} popupSize="max-w-sm"
+      <Popup isOpen={isPopupOpen} onClose={setIsPopupOpen} classList={"bg-background-popup"} popupSize="max-w-sm"
       innerProp = {
         <div className="flex justify-center items-center flex-col text-center">
           <div className='text-sm text-third font-bold pb-3'>{t('please_select_language')}</div>

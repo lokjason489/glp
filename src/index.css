@@ -33,6 +33,15 @@
 } */
 
 @layer base {
+  :root{
+    --color-primary: #b29966;
+    --color-secondary: #2b6d71;
+    --color-third: #707070;
+    --color-primary-hover: #c1ae84;
+    --font-primary: Avenir,AvenirLTS,Helvetica,Arial,sans-serif;
+    --text-transform: none;
+    --round-primary: 0.25rem;
+  }
 
   [data-theme="GLP"] {
     --color-primary: #b29966;

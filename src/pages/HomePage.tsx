@@ -2,22 +2,24 @@ import React, { useEffect, useState, useRef } from 'react';
 import Layout from '../components/ui/layout'
 import { useTranslation } from 'react-i18next';
 import ProgressNav from '../components/widget/ProgressNav';
-import { MdKeyboardArrowDown ,MdManageHistory } from "react-icons/md";
-import { IoCalendarOutline, IoPersonAddSharp, IoMegaphoneOutline, IoCaretForwardOutline ,IoBusinessOutline } from "react-icons/io5"
+import { MdKeyboardArrowDown, MdManageHistory } from "react-icons/md";
+import { IoCalendarOutline, IoPersonAddSharp, IoMegaphoneOutline, IoCaretForwardOutline, IoBusinessOutline } from "react-icons/io5"
 import HotelTowers from '../components/widget/HotelTowers';
 import RoomsGuest from '../components/widget/RoomsGuest';
 import PopupCalendar from '../components/widget/PopupCalendar';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
+interface Props {
+}
 
-const HomePage = () => {
+const HomePage: React.FC<Props> = () => {
   const { t } = useTranslation();
 
   const { skin } = useParams();
 
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const handleClickOutside = (event: {target:any}) => {
+  const handleClickOutside = (event: { target: any }) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
       setIsOpenRoomGuest(false);
     }
@@ -57,12 +59,12 @@ const HomePage = () => {
     setIsOpenCalendar(!isOpenCalendar);
   }
 
-  const handleNewArrivalDate = (new_arrivalDate : string) => {
+  const handleNewArrivalDate = (new_arrivalDate: string) => {
     new Date(new_arrivalDate) > new Date(departureDate) && setDepartureDate(new_arrivalDate);
     setArrivalDate(new_arrivalDate);
   }
 
-  const handleNewDepartureDate = (new_departureDate : string) => {
+  const handleNewDepartureDate = (new_departureDate: string) => {
     new Date(arrivalDate) > new Date(new_departureDate) && setArrivalDate(new_departureDate);
     setDepartureDate(new_departureDate);
   }
@@ -77,7 +79,7 @@ const HomePage = () => {
         alt: 'Image 1',
         desc: 'Description for Image 1',
       }, {
-        src: 'https://via.placeholder.com/960x540.png', 
+        src: 'https://via.placeholder.com/960x540.png',
         alt: 'Image 2',
         desc: 'Description for Image 2',
       }]
@@ -101,11 +103,11 @@ const HomePage = () => {
         alt: 'Image 1',
         desc: 'Description for Image 1',
       }, {
-        src: 'https://via.placeholder.com/960x540.png', 
+        src: 'https://via.placeholder.com/960x540.png',
         alt: 'Image 2',
         desc: 'Description for Image 2',
-      },{
-        src: 'https://via.placeholder.com/960x540.png', 
+      }, {
+        src: 'https://via.placeholder.com/960x540.png',
         alt: 'Image 3',
         desc: 'Description for Image 3',
       }]
@@ -239,17 +241,19 @@ const HomePage = () => {
             </div>
             <div className="lg:w-1/3 w-full">
               <div className="p-2 group">
-                <button className="bg-primary w-full block tracking-widest rounded text-white b font-medium mt-4 lg:mt-8 py-2 text-2xl uppercase duration-300 relative overflow-hidden group-hover:bg-primary-hover group-hover:-indent-12">
-                  <span >{t('search')}</span>
-                  <span className="absolute opacity-0 left-1/2 translate-x-1/4 top-0 bottom-0 flex items-center pl-3 pr-2 transition-transform duration-500 transform group-hover:translate-x-full group-hover:opacity-100">
-                    <IoCaretForwardOutline className="text-2xl " />
-                  </span>
-                </button>
+                <Link to={`/roomType/?startDay=${arrivalDate}&endDay=${departureDate}${skin ? '&skin=' + skin : ''}`}>
+                  <button className="bg-primary w-full block tracking-widest rounded text-white b font-medium mt-4 lg:mt-8 py-2 text-2xl uppercase duration-300 relative overflow-hidden group-hover:bg-primary-hover group-hover:-indent-12">
+                    <span >{t('search')}</span>
+                    <span className="absolute opacity-0 left-1/2 translate-x-1/4 top-0 bottom-0 flex items-center pl-3 pr-2 transition-transform duration-500 transform group-hover:translate-x-full group-hover:opacity-100">
+                      <IoCaretForwardOutline className="text-2xl " />
+                    </span>
+                  </button>
+                </Link>
               </div>
-              <a className='flex justify-center lg:justify-end m-2 underline gap-1 text-sm text-third' href='https://www.grandlisboapalace.com/reservation/booking-search?skin=pvm'>
-                  <MdManageHistory/>
-                   MANAGE BOOKING
-                </a>
+              <Link className='flex justify-center lg:justify-end m-2 underline gap-1 text-sm text-third' to={`/booking-search/${skin ? '?skin=' + skin : ''}`}>
+                <MdManageHistory />
+                MANAGE BOOKING
+              </Link>
             </div>
           </form>
           <div className='block pt-4'>
@@ -258,11 +262,20 @@ const HomePage = () => {
             </div>
             {
               HotelTowersListing.map((item, index) => (
-                <HotelTowers key={index} image={item.image} title={item.title} desc={item.desc} ImageList={item.ImageList}/>
+                <HotelTowers key={index} image={item.image} title={item.title} desc={item.desc} ImageList={item.ImageList} />
               ))
             }
           </div>
-          <PopupCalendar currency={currency} isOpen={isOpenCalendar} onClose={toggleCalendar} arrivalDate={arrivalDate} departureDate={departureDate} setArrivalDate={handleNewArrivalDate} setDepartureDate={handleNewDepartureDate} className={""} CalendarList={CalendarList} />
+          <PopupCalendar
+            currency={currency}
+            isOpen={isOpenCalendar}
+            onClose={setIsOpenCalendar}
+            arrivalDate={arrivalDate}
+            departureDate={departureDate}
+            setArrivalDate={handleNewArrivalDate}
+            setDepartureDate={handleNewDepartureDate}
+            className={""}
+            CalendarList={CalendarList} />
         </div>
       )}
     </Layout>
