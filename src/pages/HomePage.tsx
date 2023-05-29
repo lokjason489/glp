@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import Layout from '../components/ui/layout'
 import { useTranslation } from 'react-i18next';
 import ProgressNav from '../components/widget/ProgressNav';
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const HomePage: React.FC<Props> = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { skin } = useParams();
 
@@ -29,7 +29,11 @@ const HomePage: React.FC<Props> = () => {
 
   const hotelList = ['glp', 'tkl', 'pvm']
 
+  const [hotel, setHotel] = useState(hotelList[0]);
+
   const [isOpenHotel, setIsOpenHotel] = useState(false);
+
+
 
   const toggleHotel = () => {
     setIsOpenHotel(!isOpenHotel);
@@ -41,9 +45,21 @@ const HomePage: React.FC<Props> = () => {
     setIsOpenRoomGuest(!isOpenRoomGuest);
   }
 
-  const [arrivalDate, setArrivalDate] = useState(new Date().toISOString().substring(0, 10));
+  const options: Intl.DateTimeFormatOptions = useMemo(() => ({
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  }), [])
 
-  const [departureDate, setDepartureDate] = useState(new Date().toISOString().substring(0, 10));
+  function addDays(date: Date | string, days: number) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }
+
+  const [arrivalDate, setArrivalDate] = useState(new Date());
+
+  const [departureDate, setDepartureDate] = useState(new Date(addDays(arrivalDate, 1)));
 
   const [roomsAdults, setRoomsAdults] = useState(2);
 
@@ -59,12 +75,12 @@ const HomePage: React.FC<Props> = () => {
     setIsOpenCalendar(!isOpenCalendar);
   }
 
-  const handleNewArrivalDate = (new_arrivalDate: string) => {
+  const handleNewArrivalDate = (new_arrivalDate: Date) => {
     new Date(new_arrivalDate) > new Date(departureDate) && setDepartureDate(new_arrivalDate);
     setArrivalDate(new_arrivalDate);
   }
 
-  const handleNewDepartureDate = (new_departureDate: string) => {
+  const handleNewDepartureDate = (new_departureDate: Date) => {
     new Date(arrivalDate) > new Date(new_departureDate) && setArrivalDate(new_departureDate);
     setDepartureDate(new_departureDate);
   }
@@ -124,6 +140,7 @@ const HomePage: React.FC<Props> = () => {
 
   useEffect(() => {
     document.title = `${t('glp_title')}`;
+
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
@@ -138,145 +155,150 @@ const HomePage: React.FC<Props> = () => {
           <div id="ProgressNavContainer" className='md:block hidden'>
             <ProgressNav progressList={progressList} currentProgress={0} />
           </div>
-          <form className='bg-white shadow focus-within:shadow-lg border-r-2 p-4 m-2 flex duration-100 flex-wrap mt-10 md:pt-2'>
-            <div className='lg:w-1/3 w-full'>
-              <div className='p-2'>
-                <label htmlFor="hotel_select" className='required text-third'>
-                  {t('select_hotel')}
-                </label>
-                <div className="relative inline-block w-full my-2">
-                  <select required id='hotel_select'
-                    className="block pl-12 cursor-pointer appearance-none w-full py-3 text-sm lg:text-base text-third bg-white border text-left border-gray-300 hover:border-gray-500 px-4 rounded shadow focus:outline-none focus:shadow-outline"
-                    onClick={() => toggleHotel()}>
-                    {hotelList.map((item, index) => (
-                      <option key={index}>{t(item)}</option>
-                    ))}
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <MdKeyboardArrowDown className={`${isOpenHotel ? 'rotate-180' : ''} text-third duration-300 pointer-events-none h-5 w-5`}></MdKeyboardArrowDown>
-                  </div>
-                  <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center px-2 text-gray-700">
-                    <IoBusinessOutline className='h-5 w-5 text-third'></IoBusinessOutline>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className='lg:w-1/3 md:w-1/2 w-full'>
-              <div className='p-2'>
-                <label htmlFor="arrival_date" className='required text-third'>
-                  {t('arrival_date')}
-                </label>
-                <div className="relative inline-block w-full my-2">
-                  <input type="text" readOnly capture id="arrival_date"
-                    value={arrivalDate}
-                    className='block text-sm lg:text-base cursor-pointer appearance-none w-full text-third py-3 bg-white border text-center border-gray-300 hover:border-gray-500 px-4 rounded shadow focus:outline-none focus:shadow-outline'
-                    onClick={() => toggleCalendar()}
-                  />
-                  <div className="pointer-events-none absolute inset-y-0 left-10 flex items-center px-2 text-gray-700">
-                    <IoCalendarOutline className='text-xl text-third'></IoCalendarOutline>
+          <div className='pt-6'>
+            <form className='bg-white shadow focus-within:shadow-lg border-r-2 p-8 m-2 flex duration-100 flex-wrap'>
+              <div className='lg:w-1/3 w-full'>
+                <div className='p-3'>
+                  <label htmlFor="hotel_select" className='required text-third'>
+                    {t('select_hotel')}
+                  </label>
+                  <div className="relative inline-block w-full my-2">
+                    <select required id='hotel_select'
+                      className="block pl-12 cursor-pointer appearance-none w-full py-3 text-sm lg:text-base text-third bg-white border text-left border-gray-300 hover:border-gray-500 px-4 rounded shadow focus:outline-none focus:shadow-outline"
+                      value={hotel}
+                      onChange={(event) => {setHotel(event.target.value)}}
+                      onClick={() => toggleHotel()}>
+                      {hotelList.map((item, index) => (
+                        <option key={index}>{t(item)}</option>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <MdKeyboardArrowDown className={`${isOpenHotel ? 'rotate-180' : ''} text-third duration-300 pointer-events-none h-5 w-5`}></MdKeyboardArrowDown>
+                    </div>
+                    <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center px-2 text-gray-700">
+                      <IoBusinessOutline className='h-5 w-5 text-third'></IoBusinessOutline>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className='lg:w-1/3 md:w-1/2 w-full'>
-              <div className='p-2'>
-                <label htmlFor="departure_date" className='required text-third'>
-                  {t('departure_date')}
-                </label>
-                <div className="relative inline-block w-full my-2">
-                  <input type="text" readOnly capture id="departure_date"
-                    value={departureDate}
-                    className='block text-sm lg:text-base cursor-pointer appearance-none w-full py-3 text-third bg-white border text-center border-gray-300 hover:border-gray-500 px-4 rounded shadow focus:outline-none focus:shadow-outline'
-                    onClick={() => toggleCalendar()} />
-                  <div className="pointer-events-none absolute inset-y-0 left-10 flex items-center px-2 text-gray-700">
-                    <IoCalendarOutline className='text-xl text-third'></IoCalendarOutline>
+              <div className='lg:w-1/3 md:w-1/2 w-full'>
+                <div className='p-3'>
+                  <label htmlFor="arrival_date" className='required text-third'>
+                    {t('arrival_date')}
+                  </label>
+                  <div className="relative inline-block w-full my-2">
+                    <input type="text" readOnly capture id="arrival_date"
+                      value={arrivalDate.toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'zh-CN', options)}
+                      className='block text-sm lg:text-base cursor-pointer appearance-none w-full text-third py-3 bg-white border text-center border-gray-300 hover:border-gray-500 px-4 rounded shadow focus:outline-none focus:shadow-outline'
+                      onClick={() => toggleCalendar()}
+                    />
+                    <div className="pointer-events-none absolute inset-y-0 left-10 flex items-center px-2 text-gray-700">
+                      <IoCalendarOutline className='text-xl text-third'></IoCalendarOutline>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className='lg:w-1/3 w-full' ref={menuRef}>
-              <div className='p-2'>
-                <label htmlFor="rooms_guests" className='text-third' >
-                  {t('rooms_guests')}
-                </label>
-                <div className="relative inline-block w-full my-2" >
-                  <input type="text" value={room + " " + t('room') + " / " + roomsAdults + " " + t('adult') + ", " + roomChild + " " + t('child')} readOnly required id="rooms_guests"
-                    className='block pl-12 text-sm lg:text-base cursor-pointer appearance-none w-full py-3 text-third bg-white border border-gray-300 hover:border-gray-500 px-4 rounded shadow focus:outline-none focus:shadow-outline'
-                    onClick={
-                      () => toggleRoomGuest()
-                    } />
-                  <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center px-2 text-gray-700">
-                    <IoPersonAddSharp className='text-xl text-third'></IoPersonAddSharp>
+              <div className='lg:w-1/3 md:w-1/2 w-full'>
+                <div className='p-3'>
+                  <label htmlFor="departure_date" className='required text-third'>
+                    {t('departure_date')}
+                  </label>
+                  <div className="relative inline-block w-full my-2">
+                    <input type="text" readOnly capture id="departure_date"
+                      value={departureDate.toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'zh-CN', options)}
+                      className='block text-sm lg:text-base cursor-pointer appearance-none w-full py-3 text-third bg-white border text-center border-gray-300 hover:border-gray-500 px-4 rounded shadow focus:outline-none focus:shadow-outline'
+                      onClick={() => toggleCalendar()} />
+                    <div className="pointer-events-none absolute inset-y-0 left-10 flex items-center px-2 text-gray-700">
+                      <IoCalendarOutline className='text-xl text-third'></IoCalendarOutline>
+                    </div>
                   </div>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <MdKeyboardArrowDown className={`${isOpenRoomGuest ? 'rotate-180' : ''} text-third duration-300 pointer-events-none h-5 w-5`}></MdKeyboardArrowDown>
-                  </div>
-                  <RoomsGuest isOpen={isOpenRoomGuest} room={room} adult={roomsAdults} child={roomChild} roomOnChange={setRoom} adultOnChange={setRoomsAdults} childOnChange={setRoomChild}></RoomsGuest>
                 </div>
               </div>
-            </div>
-            <div className='lg:w-1/3 w-full'>
-              <div className='p-2'>
-                <label htmlFor="promotion_code" className='text-third'>
-                  {t('promotion_code')}
-                </label>
-                <div className="relative inline-block w-full my-2">
-                  <input type="text" required id="promotion_code"
-                    value={promotionCode}
-                    className='block cursor-pointer w-full py-3 
+              <div className='lg:w-1/3 w-full' ref={menuRef}>
+                <div className='p-3'>
+                  <label htmlFor="rooms_guests" className='text-third' >
+                    {t('rooms_guests')}
+                  </label>
+                  <div className="relative inline-block w-full my-2" >
+                    <input type="text" value={room + " " + t('room') + " / " + roomsAdults + " " + t('adult') + ", " + roomChild + " " + t('child')} readOnly required id="rooms_guests"
+                      className='block pl-12 text-sm lg:text-base cursor-pointer appearance-none w-full py-3 text-third bg-white border border-gray-300 hover:border-gray-500 px-4 rounded shadow focus:outline-none focus:shadow-outline'
+                      onClick={
+                        () => toggleRoomGuest()
+                      } />
+                    <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center px-2 text-gray-700">
+                      <IoPersonAddSharp className='text-xl text-third'></IoPersonAddSharp>
+                    </div>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <MdKeyboardArrowDown className={`${isOpenRoomGuest ? 'rotate-180' : ''} text-third duration-300 pointer-events-none h-5 w-5`}></MdKeyboardArrowDown>
+                    </div>
+                    <RoomsGuest isOpen={isOpenRoomGuest} room={room} adult={roomsAdults} child={roomChild} roomOnChange={setRoom} adultOnChange={setRoomsAdults} childOnChange={setRoomChild}></RoomsGuest>
+                  </div>
+                </div>
+              </div>
+              <div className='lg:w-1/3 w-full'>
+                <div className='p-3'>
+                  <label htmlFor="promotion_code" className='text-third'>
+                    {t('promotion_code')}
+                  </label>
+                  <div className="relative inline-block w-full my-2">
+                    <input type="text" required id="promotion_code"
+                      value={promotionCode}
+                      className='block cursor-pointer w-full py-3 
                              text-sm lg:text-base
                              text-third
                              bg-white border text-left border-gray-300 
                              hover:border-gray-500 px-4 rounded 
                              pl-12
                              shadow focus:outline-none focus:shadow-outline'
-                    onChange={(event) => {
-                      setPromotionCode(event.target.value);
-                    }} />
-                  <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center px-2 text-gray-700">
-                    <IoMegaphoneOutline className='text-xl text-third'></IoMegaphoneOutline>
+                      onChange={(event) => {
+                        setPromotionCode(event.target.value);
+                      }} />
+                    <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center px-2 text-gray-700">
+                      <IoMegaphoneOutline className='text-xl text-third'></IoMegaphoneOutline>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="lg:w-1/3 w-full">
-              <div className="p-2 group">
-                <Link to={`/roomType/?startDay=${arrivalDate}&endDay=${departureDate}${skin ? '&skin=' + skin : ''}`}>
-                  <button className="bg-primary w-full block tracking-widest rounded text-white b font-medium mt-4 lg:mt-8 py-2 text-2xl uppercase duration-300 relative overflow-hidden group-hover:bg-primary-hover group-hover:-indent-12">
-                    <span >{t('search')}</span>
-                    <span className="absolute opacity-0 left-1/2 translate-x-1/4 top-0 bottom-0 flex items-center pl-3 pr-2 transition-transform duration-500 transform group-hover:translate-x-full group-hover:opacity-100">
-                      <IoCaretForwardOutline className="text-2xl " />
-                    </span>
-                  </button>
+              <div className="lg:w-1/3 w-full">
+                <div className="p-3 group">
+                  <Link to={`/roomType/?hotel=${hotel}&adult=${roomsAdults}&child=${roomChild}&roomNumber=${room}&startDay=${arrivalDate.toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'zh-CN', options)}&endDay=${departureDate.toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'zh-CN', options)}${skin ? '&skin=' + skin : ''}`}>
+                    <button className="bg-primary w-full block tracking-widest rounded text-white b font-medium mt-4 lg:mt-8 py-2 text-2xl uppercase duration-300 relative ease-in-out overflow-hidden group-hover:bg-primary-hover group-hover:-indent-12">
+                      <span >{t('search')}</span>
+                      {<span className="absolute opacity-0 left-1/2 translate-x-1/4 top-0 bottom-0 flex items-center pl-3 pr-2 transition-transform duration-300 ease-in-out transform group-hover:translate-x-full group-hover:opacity-100">
+                        <IoCaretForwardOutline className="text-2xl " />
+                      </span>}
+                    </button>
+                  </Link>
+                </div>
+                <Link className='flex justify-center lg:justify-end m-2 underline gap-1 text-sm text-third' to={`/booking-search/${skin ? '?skin=' + skin : ''}`}>
+                  <MdManageHistory />
+                  MANAGE BOOKING
                 </Link>
               </div>
-              <Link className='flex justify-center lg:justify-end m-2 underline gap-1 text-sm text-third' to={`/booking-search/${skin ? '?skin=' + skin : ''}`}>
-                <MdManageHistory />
-                MANAGE BOOKING
-              </Link>
+            </form>
+            <div className='block pt-4 m-2'>
+              <div className='text-secondary text-xl my-2 py-3 font-bold title text-center md:text-left'>
+                {t('available_hotels')}
+              </div>
+              {
+                HotelTowersListing.map((item, index) => (
+                  <HotelTowers key={index} image={item.image} title={item.title} desc={item.desc} ImageList={item.ImageList} />
+                ))
+              }
             </div>
-          </form>
-          <div className='block pt-4'>
-            <div className='text-secondary text-xl my-2 py-3 font-bold title'>
-              {t('available_hotels')}
-            </div>
-            {
-              HotelTowersListing.map((item, index) => (
-                <HotelTowers key={index} image={item.image} title={item.title} desc={item.desc} ImageList={item.ImageList} />
-              ))
-            }
+            <PopupCalendar
+              currency={currency}
+              isOpen={isOpenCalendar}
+              onClose={setIsOpenCalendar}
+              arrivalDate={arrivalDate}
+              departureDate={departureDate}
+              setArrivalDate={handleNewArrivalDate}
+              setDepartureDate={handleNewDepartureDate}
+              className={""}
+              CalendarList={CalendarList} />
           </div>
-          <PopupCalendar
-            currency={currency}
-            isOpen={isOpenCalendar}
-            onClose={setIsOpenCalendar}
-            arrivalDate={arrivalDate}
-            departureDate={departureDate}
-            setArrivalDate={handleNewArrivalDate}
-            setDepartureDate={handleNewDepartureDate}
-            className={""}
-            CalendarList={CalendarList} />
         </div>
+
       )}
     </Layout>
   );

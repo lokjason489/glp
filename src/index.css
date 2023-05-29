@@ -34,43 +34,50 @@
 
 @layer base {
   :root{
-    --color-primary: #b29966;
-    --color-secondary: #2b6d71;
-    --color-third: #707070;
-    --color-primary-hover: #c1ae84;
+    --color-primary: 178 153 102;
+    --color-secondary: 43 109 113;
+    --color-third: 112 112 112;
+    --color-primary-hover: 193 174 132;
     --font-primary: Avenir,AvenirLTS,Helvetica,Arial,sans-serif;
     --text-transform: none;
     --round-primary: 0.25rem;
+    --background-image : url('https://www.grandlisboapalace.com/reservation/img/home_bg.342b00e4.jpg');
+    --alpha-05: 0.05;
+    --alpha-1: 0.1;
+    --alpha-25: 0.25;
   }
 
   [data-theme="GLP"] {
-    --color-primary: #b29966;
-    --color-secondary: #2b6d71;
-    --color-third: #707070;
-    --color-primary-hover: #c1ae84;
+    --color-primary: 178 153 102;
+    --color-secondary: 43 109 113;
+    --color-third: 112 112 112;
+    --color-primary-hover: 193 174 132;
     --font-primary: Avenir,AvenirLTS,Helvetica,Arial,sans-serif;
     --text-transform: none;
     --round-primary: 0.25rem;
+    --background-image : url('https://www.grandlisboapalace.com/reservation/img/home_bg.342b00e4.jpg')
   }
 
   [data-theme="TKL"] {
-    --color-primary: #353e47;
-    --color-secondary:  #000000;
-    --color-third: #707070;
-    --color-primary-hover: #5d656c;
+    --color-primary: 53, 62, 71;
+    --color-secondary:  0, 0, 0;
+    --color-third: 112, 112, 112;
+    --color-primary-hover: 93, 101, 108;
     --font-primary: Gotham,Helvetica,Arial,sans-serif;
     --text-transform: uppercase;
     --round-primary: 0px;
+    --background-image : none;
   }
 
   [data-theme="PVM"]{
-    --color-primary: #7c6537;
-    --color-secondary: #806533;
-    --color-third: #707070;
-    --color-primary-hover: #beab82;
+    --color-primary: 124, 101, 55;
+    --color-secondary: 128, 101, 51;
+    --color-third: 112, 112, 112;
+    --color-primary-hover: 190, 171, 130;
     --font-primary: Gill Sans,Helvetica,Arial,sans-serif;
     --text-transform: none;
     --round-primary: 0.25rem;
+    --background-image : none;
   }
 
   html{
@@ -202,4 +209,48 @@
 label {
   font-weight: 400;
   font-size: 14px;
+}
+
+.calendar__calendar-container{
+  background-color: #e9e9e9;
+  font-family: var(--font-primary) !important;
+}
+
+.calendar__week-container{
+  background-color: #e9e9e9 !important;
+}
+
+.calendar__weekCell{
+  background-color: #e9e9e9 !important;
+  width: calc(92%/7) !important;
+}
+
+@media screen and (min-width: 768px) {
+  .basis-100-7{
+    flex-basis: calc(100%/7 - 8px);
+  }
+}
+
+.basis-100-7{
+  width: calc(100%/7);
+}
+
+.box-shadow-1{
+  box-shadow: 0 0 1px 0 #000;
+}
+
+select option{
+  font-size: 1rem/* 14px */;
+  line-height: 1.5rem/* 20px */;
+  padding: 1rem 0.75rem;
+}
+
+select option:hover{
+  background-color: var(--color-secondary);
+  color: #fff;
+}
+
+select option:checked{
+  background-color: var(--color-secondary);
+  color: #fff;
 }

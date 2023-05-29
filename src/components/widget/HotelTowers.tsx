@@ -25,7 +25,7 @@ const HotelTowers: React.FC<Props> = ({ image, title, desc, ImageList }) => {
 
   return (
     <div className="flex md:flex-row flex-col md:justify-start justify-center border-t border-third py-4 my-2 md:gap-8 gap-2">
-      <div className="lg:w-auto w-full sm:h-56 flex justify-center basis-96 shrink-0 grow-0 relative cursor-pointer group group-hover:bg-gray-500">
+      <div className="lg:w-auto w-full md:h-56 flex justify-center basis-96 shrink-0 grow-0 relative cursor-pointer group group-hover:bg-primary-hover">
         <div className="relative">
         <img
           src={image}
@@ -33,7 +33,7 @@ const HotelTowers: React.FC<Props> = ({ image, title, desc, ImageList }) => {
           className="w-full object-cover h-full"
           onClick={togglePopup}
         />
-        <div className="text-white absolute right-0 bottom-0 h-10 w-22 bg-gray-600 flex justify-around items-center gap-2 px-2 group-hover:bg-gray-500 pointer-events-none">
+        <div className="text-white absolute right-0 bottom-0 h-10 w-22 bg-gray-600 flex justify-around items-center gap-2 px-2 group-hover:bg-primary-hover pointer-events-none">
             <IoImagesOutline className="text-2xl" />
             <p>Gallery</p>
           </div>

@@ -9,10 +9,10 @@ interface Props {
     onClose: React.Dispatch<React.SetStateAction<boolean>>
     CalendarList: CalendarList;
     className: string;
-    arrivalDate: string;
-    departureDate: string;
-    setArrivalDate: (arrivalDate: string) => void;
-    setDepartureDate: (departureDate: string) => void;
+    arrivalDate: Date;
+    departureDate: Date;
+    setArrivalDate: (arrivalDate: Date) => void;
+    setDepartureDate: (departureDate: Date) => void;
     currency: string;
 }
 
@@ -43,19 +43,10 @@ const PopupCalendar: React.FC<Props> = ({ isOpen, onClose, CalendarList, classNa
     const handleSelect = (date : Date[]) => {
         setSelectedDate(date);
         let tempDate1 = new Date(date[0]);
-
-        let arrivalDay = tempDate1.getDate();
-        let arrivalMonth = tempDate1.getMonth() + 1;
-        let arrivalYear = tempDate1.getFullYear();
-        let arrivalDate = arrivalYear + "-" + arrivalMonth + "-" + arrivalDay;
-        setArrivalDate(arrivalDate);
+        setArrivalDate(tempDate1);
         if (date[1]) {
             let tempDate2 = new Date(date[1]);
-            let departureDay = tempDate2.getDate();
-            let departureMonth = tempDate2.getMonth() + 1;
-            let departureYear = tempDate2.getFullYear();
-            let departureDate = departureYear + "-" + departureMonth + "-" + departureDay;
-            setDepartureDate(departureDate);
+            setDepartureDate(tempDate2);
         }
     }
 
@@ -103,7 +94,7 @@ const PopupCalendar: React.FC<Props> = ({ isOpen, onClose, CalendarList, classNa
                 <div className={`fixed shadow-lg top-1/2 left-1/2 rounded-md transform -translate-x-1/2 -translate-y-1/2 bg-background-popup z-50 lg:w-10/12 md:max-w-5xl w-full ${className}`}>
                     <div className='w-full text-right pointer-events-none'> <button
                         className=" text-gray-500 hover:text-gray-800 text-right h-8 w-8 my-2 font-black pointer-events-auto"
-                        onClick={()=>onClose}
+                        onClick={()=>onClose(false)}
                     >
                         <IoCloseCircleOutline className="text-third h-full w-full hover:text-gray-300" />
                     </button></div>

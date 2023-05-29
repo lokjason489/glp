@@ -2,17 +2,17 @@
 
 module.exports = {
   mode: 'jit',
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+  content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: 'media', // or 'media' or 'class'
   theme: {
     extend: {
       colors: {
-        'primary': 'var(--color-primary)', 
-        'secondary': 'var(--color-secondary)',
-        'third': 'var(--color-third)',
+        'primary': 'rgb(var(--color-primary))', 
+        'secondary': 'rgb(var(--color-secondary))',
+        'third': 'rgb(var(--color-third))',
         'button-inactive': '#acacac',
         'background-popup': '#e9e9e9',
-        'primary-hover': 'var(--color-primary-hover)',
+        'primary-hover': 'rgb(var(--color-primary-hover))',
       },
       fontFamily: {
         'primary': 'var(--font-primary)',
@@ -29,8 +29,18 @@ module.exports = {
         'full': '9999px',
       },
       boxShadow: {
-        'DEFAULT': '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 4px -1px rgb(0 0 0 / 0.1)',
-      }
+        'sm': '0 1px 2px 0 rgb(var(--color-primary)/ var(--alpha-05))',
+        'DEFAULT': '0 1px 3px 0 rgb(var(--color-primary)/ var(--alpha-1)), 0 1px 4px -1px rgb(var(--color-primary)/ var(--alpha-1))',
+        'md':'0 10px 15px -3px rgb(var(--color-primary)/ var(--alpha-1)), 0 4px 6px -4px rgb(var(--color-primary)/ var(--alpha-1))',
+        'lg':'0 10px 15px -3px rgb(var(--color-primary)/ var(--alpha-1)), 0 4px 6px -4px rgb(var(--color-primary)/ var(--alpha-1))',
+        'xl': '0 20px 25px -5px rgb(var(--color-primary)/ var(--alpha-1)), 0 8px 10px -6px rgb(var(--color-primary)/ var(--alpha-1))',
+        '2xl': '0 25px 50px -12px rgb(var(--color-primary)/ var(--alpha-25))',
+        'inner': 'inset 0 2px 4px 0 rgb(var(--color-primary)/ var(--alpha-05))',
+        'none': 'none',
+      },
+      backgroundImage: {
+        'image-primary': "var(--background-image)",
+      },
     },
   },
   variants: {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import LanguageMenu from '../widget/LanguageMenu';
 import CurrencyMenu from '../widget/CurrencyMenu';
 import { IoCaretDown, IoInformationCircleOutline } from "react-icons/io5";
@@ -50,6 +50,18 @@ const Header: React.FC<Props> = ({ currencyList, currency, setCurrency, skin }) 
 
   const [isScrolling, setIsScrolling] = useState(false);
 
+  // const primaryHeader = document.getElementById("AppHeader");
+  // const scrollWatcher = document.createElement("div");
+
+  // scrollWatcher.setAttribute("data-scroll-watcher","");
+
+  // primaryHeader?.before(scrollWatcher);
+
+  // const navObserver = new IntersectionObserver((entries)=>{
+  //   setIsScrolling(!entries[0].isIntersecting)
+  // },{rootMargin: "90px 0px 0px 0px"});
+
+  // navObserver.observe(scrollWatcher);
 
   useEffect(() => {
     let isTop = true;
@@ -66,7 +78,7 @@ const Header: React.FC<Props> = ({ currencyList, currency, setCurrency, skin }) 
   });
 
   return (
-    <header className={`top-0 w-full z-30 bg-white shadow-xl border-secondary border-b-2 transition-all ${isScrolling ? "h-14 ease-in sticky duration-150" : `${skin === 'tkl' ? 'md:h-20': "md:h-28" } md:static h-14 ease-out fixed duration-300`}`}>
+    <header id = "AppHeader" className={`top-0 w-full z-30 bg-white shadow-xl border-secondary border-b-2 transition-all ${isScrolling ? "h-14 ease-in sticky duration-150" : `${skin === 'tkl' ? 'md:h-20': "md:h-28" } md:static h-14 ease-out fixed duration-300`}`}>
       <div className="w-1/1 h-1/1 relative">
         <div className={`absolute md:block hidden top-1/2 left-1/2 transform -translate-x-1/2 ${skin === 'tkl' ? '': '' } `}>
           <a href="/" className={`w-auto ${isScrolling ? "h-9 my-3" : "h-20 my-4"}`}>
